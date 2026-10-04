@@ -1,0 +1,247 @@
+/* ===========================
+   Painel de Chamadas
+   =========================== */
+
+.painel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--azul);
+  padding: 40px 48px;
+}
+
+.painel > h2 {
+  margin: 0 0 28px;
+  color: var(--azul);
+  font-size: 26px;
+}
+
+/* --- Barra de ação --- */
+
+.painel-acao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.painel-fila-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--azul-claro);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 14px;
+}
+
+.painel-btn-chamar {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  background: var(--azul);
+  color: var(--branco);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+}
+
+.painel-btn-chamar:hover:not(:disabled) {
+  background: #003b77;
+}
+
+.painel-btn-chamar:disabled {
+  background: var(--border);
+  color: var(--text);
+  cursor: not-allowed;
+}
+
+/* --- Destaque (senha atual) --- */
+
+.painel-destaque {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.painel-destaque-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 28px 32px;
+  background: var(--azul-claro);
+}
+
+.painel-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--azul);
+}
+
+.painel-senha {
+  display: block;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-h);
+}
+
+.painel-senha-sp {
+  color: var(--vermelho);
+}
+
+.painel-senha-sg {
+  color: var(--azul);
+}
+
+.painel-senha-se {
+  color: #b07800; /* amarelo escuro para contraste */
+}
+
+.painel-tipo {
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* --- Bloco do guichê --- */
+
+.painel-guiche {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 28px 40px;
+  background: var(--azul);
+  color: var(--branco);
+  min-width: 140px;
+}
+
+.painel-guiche .painel-label {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.painel-guiche-numero {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--amarelo);
+}
+
+/* --- Histórico --- */
+
+.painel-historico {
+  margin-top: 36px;
+}
+
+.painel-historico h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+
+.painel-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.painel-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.painel-item-sp {
+  border-left-color: var(--vermelho);
+}
+
+.painel-item-sg {
+  border-left-color: var(--azul);
+}
+
+.painel-item-se {
+  border-left-color: var(--amarelo);
+}
+
+.painel-item-senha {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-h);
+  letter-spacing: 0.5px;
+}
+
+.painel-item-meta {
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* --- Responsivo --- */
+
+.painel-vazio {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: var(--text);
+  font-size: 14px;
+  font-style: italic;
+}
+
+.painel-historico-vazio {
+  margin: 0;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .painel {
+    padding: 28px 20px;
+  }
+
+  .painel-destaque {
+    flex-direction: column;
+  }
+
+  .painel-guiche {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 16px 20px;
+    min-width: unset;
+  }
+
+  .painel-guiche-numero {
+    font-size: 40px;
+  }
+
+  .painel-senha {
+    font-size: 34px;
+  }
+
+  .painel-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
