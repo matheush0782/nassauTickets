@@ -7,12 +7,23 @@ const tipos = [
   { codigo: 'SE', nome: 'Retirada de Exames', classe: 'se' },
 ]
 
-function EmissaoSenha({ onEmitirSenha }) {
+function dataAtual() {
+  const agora = new Date()
+  const ano = String(agora.getFullYear()).slice(-2)
+  const mes = String(agora.getMonth() + 1).padStart(2, '0')
+  const dia = String(agora.getDate()).padStart(2, '0')
+  return `${ano}${mes}${dia}`
+}
+
+function EmissaoSenha() {
+  const [sequencias, setSequencias] = useState({ SP: 0, SG: 0, SE: 0 })
   const [senhaEmitida, setSenhaEmitida] = useState(null)
 
-  function handleClick(codigo) {
-    const senha = onEmitirSenha(codigo)
-    setSenhaEmitida(senha)
+  function emitirSenha(codigo) {
+    const novaSequencia = sequencias[codigo] + 1
+    setSequencias({ ...sequencias, [codigo]: novaSequencia })
+    const sequencia = String(novaSequencia).padStart(3, '0')
+    setSenhaEmitida(`${dataAtual()}-${codigo}${sequencia}`)
   }
 
   return (
@@ -26,7 +37,7 @@ function EmissaoSenha({ onEmitirSenha }) {
             key={tipo.codigo}
             type="button"
             className={`emissao-botao emissao-botao-${tipo.classe}`}
-            onClick={() => handleClick(tipo.codigo)}
+            onClick={() => emitirSenha(tipo.codigo)}
           >
             <strong>{tipo.codigo}</strong>
             <span>{tipo.nome}</span>
