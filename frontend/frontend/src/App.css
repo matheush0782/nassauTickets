@@ -59,29 +59,6 @@
   background: #003b77;
 }
 
-.app-nav {
-  margin-left: auto;
-}
-
-.app-nav-link {
-  padding: 6px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 4px;
-  background: transparent;
-  color: var(--branco);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  letter-spacing: 0.2px;
-}
-
-.app-nav-link:hover,
-.app-nav-link.ativo {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--amarelo);
-  color: var(--amarelo);
-}
-
 @media (max-width: 640px) {
   .app-header {
     flex-direction: column;
