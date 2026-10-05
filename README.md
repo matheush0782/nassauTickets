@@ -10,9 +10,9 @@ O **nassauTickets** é um sistema web para gestão, emissão e controle de ingre
 * **Prática Acadêmica:** Aplicar conceitos e práticas ágeis de engenharia de software (como o Scrum) no desenvolvimento de uma aplicação real.
 
 ## Tecnologias Utilizadas
-* **Linguagem / Backend:** Node.js / Python (Flask/Django)
-* **Frontend:** HTML5, CSS3, JavaScript (Bootstrap / React)
-* **Banco de Dados:** PostgreSQL / MySQL / SQLite
+* **Linguagem / Backend:** Node.js
+* **Frontend:** HTML5, CSS3, JavaScript (React)
+* **Banco de Dados:** MySQL
 * **Controle de Versão:** Git & GitHub
 
 ## Visão geral do Sistema
@@ -32,12 +32,48 @@ O sistema é dividido em dois módulos principais:
 
 ## Instalação
 
-### Pré-requisitos
-* **Git** instalado na máquina.
-* **Node.js** (versão 18+) ou **Python** (versão 3.10+), dependendo do ambiente configurado.
+**Pré-requisitos**
 
-### Passos para Instalação
+Antes de executar o projeto, é necessário ter instalado:
 
-1. **Clonar o repositório:**
-   ```bash
-   git clone [https://github.com/matheush0782/nassauTickets.git](https://github.com/matheush0782/nassauTickets.git)
+- "Node.js" (https://nodejs.org/) — versão compatível com o projeto.
+- npm, que é instalado junto com o Node.js.
+- Git, para clonar o repositório.
+
+1. Clonar o repositório
+
+Abra o terminal e execute:
+
+git clone https://github.com/matheush0782/nassauTickets.git
+
+Entre na pasta do projeto:
+
+cd nassauTickets
+
+O repositório pode ser clonado diretamente pelo GitHub utilizando HTTPS.
+
+2. Acessar o frontend
+
+Entre na pasta do frontend:
+
+cd frontend
+
+3. Instalar as dependências
+
+Execute:
+
+npm install
+
+O comando instala as dependências necessárias definidas no "package.json", incluindo React, React DOM e Vite.
+
+Execução
+
+Após a instalação, ainda dentro da pasta "frontend", execute:
+
+npm run dev
+
+O Vite iniciará o servidor de desenvolvimento e exibirá no terminal o endereço local para acessar a aplicação. Normalmente, o endereço utilizado é:
+
+http://localhost:5173
+
+Abra o endereço informado pelo terminal em um navegador.
