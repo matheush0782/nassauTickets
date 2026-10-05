@@ -1,0 +1,26 @@
+:root {
+  --azul: #002d5b;
+  --azul-claro: #eef3f8;
+  --vermelho: #c8102e;
+  --amarelo: #f2a900;
+  --branco: #ffffff;
+
+  --text: #3f4650;
+  --text-h: #1c222b;
+  --bg: #f4f5f7;
+  --surface: var(--branco);
+  --border: #d9dde3;
+  --accent: var(--azul);
+
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
