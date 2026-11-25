@@ -1,0 +1,90 @@
+/* ===== Aviso de conexao ===== */
+.aviso-conexao {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border-left: 4px solid var(--vermelho);
+  background: #fdecee;
+  color: #7a0a1c;
+  font-size: 14px;
+}
+
+/* ===== Mensagem ===== */
+.mensagem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.mensagem-info { background: var(--azul-claro); color: var(--azul); border-left: 4px solid var(--azul); }
+.mensagem-sucesso { background: #e8f6ee; color: #145c32; border-left: 4px solid #1f8a4c; }
+.mensagem-erro { background: #fdecee; color: #7a0a1c; border-left: 4px solid var(--vermelho); }
+.mensagem-fechar {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* ===== Relogio ===== */
+.relogio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: var(--azul);
+}
+.relogio strong { font-size: 28px; font-variant-numeric: tabular-nums; }
+.relogio span { font-size: 13px; text-transform: capitalize; color: var(--text); }
+
+/* ===== Badge de tipo ===== */
+.badge-tipo {
+  display: inline-block;
+  min-width: 34px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: var(--branco);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+.badge-tipo-sp { background: var(--vermelho); }
+.badge-tipo-se { background: var(--amarelo); color: var(--text-h); }
+.badge-tipo-sg { background: var(--azul); }
+
+/* ===== Cartao indicador ===== */
+.cartao-indicador {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--azul);
+  background: var(--surface);
+}
+.cartao-indicador-destaque { border-top-color: var(--amarelo); }
+.cartao-indicador-titulo { font-size: 13px; color: var(--text); }
+.cartao-indicador-valor { font-size: 28px; color: var(--azul); }
+.cartao-indicador-detalhe { font-size: 12px; color: var(--text); }
+
+/* ===== Tabela ===== */
+.tabela-container { overflow-x: auto; }
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.tabela th,
+.tabela td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+.tabela th { background: var(--azul-claro); color: var(--azul); }
+.tabela tbody tr:hover { background: #fafbfc; }
+.tabela-vazia { color: var(--text); font-style: italic; }
