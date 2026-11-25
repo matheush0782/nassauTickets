@@ -30,6 +30,15 @@ O sistema é dividido em dois módulos principais:
    * Módulo de validação/check-in de bilhetes.
    * Relatórios e indicadores de público por evento.
 
+## Membros
+| Nome | Matrícula |  Papel  | 
+|----------------|-----------|---------------| 
+| Matheus Henrique | 01807287 | Scrum Master  | 
+| Matheus Kastberg | 01816352 | Desenvolvedor | 
+| Samuel Nikolas | 01786531 | Documentador e Desenvolvedor| 
+| Vagner Henrique | 01813729 | Desenvolvedor | 
+| Mario Adriano | 01699703 | Testador e Documentador |
+
 ## Instalação
 
 **Pré-requisitos**
