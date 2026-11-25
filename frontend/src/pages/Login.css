@@ -1,0 +1,43 @@
+.login-form {
+  max-width: 380px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 36px 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--azul);
+}
+.login-form h2 {
+  margin: 0;
+  color: var(--azul);
+}
+.login-form p {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+.login-form label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+.login-form input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 15px;
+  font-family: inherit;
+}
+.login-form input:focus {
+  outline: 2px solid var(--amarelo);
+  border-color: var(--azul);
+}
+.login-form .botao-primario {
+  margin-top: 8px;
+}
+.login-dica {
+  margin-top: 12px !important;
+  font-size: 12px !important;
+  color: var(--text);
+}
