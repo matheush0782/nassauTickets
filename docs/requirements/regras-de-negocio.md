@@ -3,6 +3,7 @@
 | Versão | Data | Responsável | Descrição |
 |---|---|---|---|
 | 1.0 | 25/11/2026 | Documentador 2 | Organização inicial das regras de negócio |
+| 1.1 | 26/11/2026 | Documentador 2 | Inclusão das regras RN28 (reinício diário da prioridade) e RN29 (bloqueio após encerramento manual) |
 
 ## 1. Tipos de senha
 
@@ -63,6 +64,8 @@
 | RN19 | O expediente para chamada de senhas começa às **7h** e termina às **17h**. |
 | RN20 | Atendimentos em andamento no fim do expediente devem ser concluídos pelo atendente e encerrados pela funcionalidade “Finalizar atendimento”. |
 | RN21 | Senhas que permanecerem na fila ao encerrar o expediente devem ser **descartadas** (estado `DESCARTADA`). |
+| RN28 | A alternância de prioridade **reinicia todos os dias**: o primeiro atendimento do dia sempre procura uma SP, independentemente do último tipo chamado no dia anterior. Senhas de dias anteriores que tenham ficado na fila são descartadas na virada do dia. |
+| RN29 | Após o **encerramento manual** do expediente pelo gestor, o sistema bloqueia novas chamadas e novas emissões até o dia seguinte, mesmo dentro do horário das 7h às 17h. Atendimentos já chamados ou em andamento podem ser concluídos. O gestor pode **reabrir** o expediente no mesmo dia, caso o encerramento tenha sido feito por engano. |
 
 ## 7. Painel
 

@@ -31,7 +31,7 @@ Copie `.env.example` para `.env`:
 
 ### Modo simulação
 
-Enquanto o backend não estiver pronto, o arquivo `src/services/simulador.js` reproduz as regras do Agente Sistema (numeração `YYMMDD-PPSQ`, prioridade `SP → SE|SG → SP`, máquina de estados, expediente). Abra **Totem**, **Painel** e **Atendimento** em abas diferentes para ver a sincronização automática.
+Enquanto o backend não estiver pronto, o arquivo `src/services/simulador.js` reproduz as regras do Agente Sistema (numeração `YYMMDD-PPSQ`, prioridade `SP → SE|SG → SP` reiniciada diariamente, máquina de estados, horário do expediente e bloqueio após o encerramento manual). Abra **Totem**, **Painel** e **Atendimento** em abas diferentes para ver a sincronização automática.
 
 Usuários de teste do simulador:
 
@@ -39,7 +39,7 @@ Usuários de teste do simulador:
 |---|---|---|
 | `atendente1` | `1234` | Atendente |
 | `atendente2` | `1234` | Atendente |
-| `gestor` | `admin123` | Gestor (acessa relatórios e encerra o expediente) |
+| `gestor` | `admin123` | Gestor (acessa relatórios, encerra e reabre o expediente) |
 
 ## Estrutura
 
@@ -92,12 +92,14 @@ Todas as respostas em JSON. Em caso de erro, o backend deve responder com status
 | POST | `/auth/login` | `{ usuario, senha }` | `{ usuario, nome, perfil, token }` |
 | POST | `/senhas` | `{ tipo }` | Senha emitida |
 | GET | `/painel/ultimas-chamadas?limite=5` | — | Lista de Senhas (mais recente primeiro) |
-| GET | `/fila/resumo` | — | `{ total, SP, SE, SG, expedienteAberto }` |
+| GET | `/fila/resumo` | — | `{ total, SP, SE, SG, expedienteAberto, expedienteEncerrado, motivoExpediente }` |
+| GET | `/expediente` | — | `{ expedienteAberto, expedienteEncerrado, motivoExpediente }` |
 | GET | `/guiches/:guiche/atendimento-atual` | — | Senha ou `null` |
 | POST | `/atendimentos/chamar-proxima` | `{ guiche }` | Senha chamada (o backend aplica a prioridade e trata a concorrência) |
 | POST | `/senhas/:id/chamar-novamente` | — | Senha |
 | POST | `/senhas/:id/iniciar` | — | Senha |
 | POST | `/senhas/:id/finalizar` | — | Senha |
 | POST | `/senhas/:id/nao-compareceu` | — | Senha |
-| POST | `/expediente/encerrar` | — | `{ descartadas }` |
+| POST | `/expediente/encerrar` | — | `{ descartadas }`. A partir daí, `chamar-proxima` e `POST /senhas` devem responder erro até o dia seguinte |
+| POST | `/expediente/reabrir` | — | Situação do expediente (desfaz um encerramento feito por engano no mesmo dia) |
 | GET | `/relatorios/senhas?periodo=diario&referencia=AAAA-MM-DD` | — | Lista de Senhas do período (`periodo=mensal&referencia=AAAA-MM`) |
