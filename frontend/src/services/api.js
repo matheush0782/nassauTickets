@@ -112,6 +112,16 @@ export function encerrarExpediente() {
     : requisicao('/expediente/encerrar', { method: 'POST' })
 }
 
+export function reabrirExpediente() {
+  return usandoSimulador
+    ? simular(simulador.reabrirExpediente)
+    : requisicao('/expediente/reabrir', { method: 'POST' })
+}
+
+export function consultarExpediente() {
+  return usandoSimulador ? simular(simulador.consultarExpediente) : requisicao('/expediente')
+}
+
 /* -------- Login -------- */
 export async function login(usuario, senha) {
   const dados = usandoSimulador

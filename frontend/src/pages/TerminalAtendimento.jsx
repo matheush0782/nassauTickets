@@ -6,6 +6,7 @@ import {
   encerrarExpediente,
   finalizarAtendimento,
   iniciarAtendimento,
+  reabrirExpediente,
   registrarNaoComparecimento,
   resumoFila,
 } from '../services/api.js'
@@ -74,7 +75,12 @@ function PainelGuiche({ guiche, sessao, onTrocarGuiche }) {
 
   function handleEncerrarExpediente() {
     if (!window.confirm('Encerrar o expediente? As senhas que ainda estão na fila serão descartadas.')) return
-    executar(encerrarExpediente, (r) => `Expediente encerrado. ${r.descartadas} senha(s) descartada(s).`)
+    executar(encerrarExpediente, (r) => `Expediente encerrado. ${r.descartadas} senha(s) descartada(s). Novas chamadas bloqueadas.`)
+  }
+
+  function handleReabrirExpediente() {
+    if (!window.confirm('Reabrir o expediente de hoje? Novas emissões e chamadas voltarão a ser permitidas.')) return
+    executar(reabrirExpediente, () => 'Expediente reaberto.')
   }
 
   return (
@@ -94,7 +100,7 @@ function PainelGuiche({ guiche, sessao, onTrocarGuiche }) {
       <AvisoConexao erro={fila.erro || atual.erro} />
 
       {resumo && !resumo.expedienteAberto && (
-        <Mensagem tipo="info">Fora do horário de expediente (7h às 17h). Novas chamadas estão bloqueadas.</Mensagem>
+        <Mensagem tipo="info">{resumo.motivoExpediente} Atendimentos já chamados podem ser concluídos.</Mensagem>
       )}
 
       <div className="terminal-indicadores">
@@ -193,9 +199,15 @@ function PainelGuiche({ guiche, sessao, onTrocarGuiche }) {
       {sessao.perfil === 'GESTOR' && (
         <div className="terminal-gestor">
           <h3>Ações do gestor</h3>
-          <button type="button" className="botao-perigo" disabled={processando} onClick={handleEncerrarExpediente}>
-            Encerrar expediente e descartar fila
-          </button>
+          {resumo?.expedienteEncerrado ? (
+            <button type="button" className="botao-secundario" disabled={processando} onClick={handleReabrirExpediente}>
+              Reabrir expediente
+            </button>
+          ) : (
+            <button type="button" className="botao-perigo" disabled={processando} onClick={handleEncerrarExpediente}>
+              Encerrar expediente e descartar fila
+            </button>
+          )}
         </div>
       )}
     </section>

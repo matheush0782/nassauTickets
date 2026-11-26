@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { emitirSenha } from '../services/api.js'
+import { consultarExpediente, emitirSenha } from '../services/api.js'
+import { useAtualizacaoAutomatica } from '../hooks/useAtualizacaoAutomatica.js'
 import Mensagem from '../components/Mensagem.jsx'
 import { formatarDataHora } from '../utils/formatacao.js'
 import './EmissaoSenha.css'
@@ -15,6 +16,8 @@ function EmissaoSenha() {
   const [senhaEmitida, setSenhaEmitida] = useState(null)
   const [erro, setErro] = useState('')
   const [enviando, setEnviando] = useState(false)
+  const expediente = useAtualizacaoAutomatica(consultarExpediente, 5000)
+  const fechado = expediente.dados && !expediente.dados.expedienteAberto
 
   async function handleClick(codigo) {
     setEnviando(true)
@@ -34,6 +37,8 @@ function EmissaoSenha() {
       <h2>Emissão de senha</h2>
       <p>Toque no tipo de atendimento desejado para retirar sua senha.</p>
 
+      {fechado && <Mensagem tipo="info">{expediente.dados.motivoExpediente} Não é possível emitir senhas.</Mensagem>}
+
       <div className="emissao-opcoes">
         {tipos.map((tipo) => (
           <button
@@ -41,7 +46,7 @@ function EmissaoSenha() {
             type="button"
             className={`emissao-botao emissao-botao-${tipo.classe}`}
             onClick={() => handleClick(tipo.codigo)}
-            disabled={enviando}
+            disabled={enviando || fechado}
           >
             <strong>{tipo.codigo}</strong>
             <span>{tipo.nome}</span>
