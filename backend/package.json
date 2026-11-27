@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Regras de negócio do nassauTickets — Desenvolvedor 2",
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "test:prioridade": "node --test tests/prioridade.test.mjs",
+    "test:estados": "node --test tests/estados.test.mjs",
+    "test:expediente": "node --test tests/expediente.test.mjs",
+    "test:integracao": "node --test tests/integracao-regras.test.mjs"
+  }
+}
