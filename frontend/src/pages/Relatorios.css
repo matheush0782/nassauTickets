@@ -1,0 +1,119 @@
+.relatorios {
+  max-width: 1080px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--azul);
+  padding: 36px 44px;
+}
+.relatorios h2 {
+  margin: 0;
+  color: var(--azul);
+}
+.relatorios h3 {
+  margin: 24px 0 12px;
+  font-size: 16px;
+  color: var(--azul);
+}
+.relatorios-topo,
+.relatorios-linha-acao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.relatorios-acoes-topo {
+  display: flex;
+  gap: 8px;
+}
+.relatorios-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 24px;
+  margin: 20px 0;
+}
+.relatorios-filtros fieldset {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+}
+.relatorios-filtros legend {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 4px;
+}
+.relatorios-filtros label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+.relatorios-data {
+  flex-direction: column;
+  align-items: flex-start !important;
+  font-size: 12px !important;
+  font-weight: 600;
+}
+.relatorios-data input {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: inherit;
+}
+.relatorios-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 2px solid var(--border);
+}
+.relatorios-aba {
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+.relatorios-aba.ativa,
+.relatorios-aba:hover {
+  color: var(--azul);
+  border-bottom-color: var(--amarelo);
+}
+.relatorios-cartoes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+.relatorios-nota {
+  font-size: 13px;
+  color: var(--text);
+}
+
+@media (max-width: 760px) {
+  .relatorios {
+    padding: 24px 16px;
+  }
+  .relatorios-cartoes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media print {
+  .app-header,
+  .relatorios-acoes-topo,
+  .relatorios-filtros fieldset,
+  .relatorios-linha-acao button {
+    display: none !important;
+  }
+  .relatorios {
+    border: none;
+    padding: 0;
+  }
+}

@@ -1,6 +1,6 @@
 import './Home.css'
 
-function Home({ onEmitirSenha, onAbrirPainel }) {
+function Home({ onEmitirSenha, onAbrirPainel, onAbrirTerminal }) {
   return (
     <section className="home pagina">
       <div className="home-conteudo">
@@ -47,6 +47,16 @@ function Home({ onEmitirSenha, onAbrirPainel }) {
             </span>
             <span className="home-card-titulo">Painel de chamadas</span>
             <span className="home-card-desc">Acompanhe a senha em atendimento</span>
+          </button>
+          <button type="button" className="home-card home-card-secundario" onClick={onAbrirTerminal}>
+            <span className="home-card-icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
+              </svg>
+            </span>
+            <span className="home-card-titulo">Área do atendente</span>
+            <span className="home-card-desc">Terminal do guichê e relatórios</span>
           </button>
         </div>
       </div>
