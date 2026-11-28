@@ -109,3 +109,18 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Ajustes do Desenvolvedor 3 */
+.emissao-botao small {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+.emissao-botao:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.senha-emitida span {
+  display: block;
+}

@@ -1,71 +1,66 @@
+import { listarUltimasChamadas } from '../services/api.js'
+import { useAtualizacaoAutomatica } from '../hooks/useAtualizacaoAutomatica.js'
+import AvisoConexao from '../components/AvisoConexao.jsx'
+import BadgeTipo from '../components/BadgeTipo.jsx'
+import Relogio from '../components/Relogio.jsx'
+import { TIPOS_SENHA, formatarHora } from '../utils/formatacao.js'
 import './PainelChamadas.css'
 
-const labelTipo = {
-  sp: 'Prioritária',
-  sg: 'Geral',
-  se: 'Exames',
-}
-
-function PainelChamadas({ chamadas, filaTamanho, onChamarProxima, onVoltar }) {
+/*
+ * Painel publico de chamadas.
+ * Regras: exibe somente as 5 ultimas senhas chamadas e NUNCA a proxima senha.
+ * Atualiza automaticamente a cada 2 segundos.
+ */
+function PainelChamadas() {
+  const { dados, erro, carregando } = useAtualizacaoAutomatica(listarUltimasChamadas, 2000)
+  const chamadas = (dados ?? []).slice(0, 5)
   const atual = chamadas[0] ?? null
-  const historico = chamadas.slice(1, 6)
+  const anteriores = chamadas.slice(1)
 
   return (
     <section className="painel pagina">
-      <button type="button" className="painel-voltar" onClick={onVoltar}>
-        ← Voltar para o início
-      </button>
-      <h2>Painel de chamadas</h2>
-
-      {/* Barra de ação do atendente */}
-      <div className="painel-acao">
-        <span className="painel-fila-badge">
-          {filaTamanho === 0
-            ? 'Fila vazia'
-            : `${filaTamanho} na fila`}
-        </span>
-        <button
-          type="button"
-          className="painel-btn-chamar"
-          onClick={onChamarProxima}
-          disabled={filaTamanho === 0}
-        >
-          Chamar próxima
-        </button>
+      <div className="painel-topo">
+        <h2>Painel de chamadas</h2>
+        <Relogio />
       </div>
 
-      <div className="painel-destaque">
-        {atual ? (
+      <AvisoConexao erro={erro} />
+
+      <div className="painel-destaque" aria-live="assertive">
+        {carregando && !dados ? (
+          <div className="painel-vazio">Carregando...</div>
+        ) : atual ? (
           <>
             <div className="painel-destaque-info">
-              <span className="painel-label">Senha em atendimento</span>
-              <strong className={`painel-senha painel-senha-${atual.tipo}`}>
-                {atual.senha}
+              <span className="painel-label">
+                {atual.status === 'CHAMADA_NOVAMENTE' ? 'Última chamada' : 'Senha chamada'}
+              </span>
+              <strong className={`painel-senha painel-senha-${atual.tipo.toLowerCase()}`}>
+                {atual.numero}
               </strong>
-              <span className="painel-tipo">{labelTipo[atual.tipo]}</span>
+              <span className="painel-tipo">{TIPOS_SENHA[atual.tipo]?.nome}</span>
             </div>
-
             <div className="painel-guiche">
               <span className="painel-label">Guichê</span>
               <strong className="painel-guiche-numero">{atual.guiche}</strong>
             </div>
           </>
         ) : (
-          <div className="painel-vazio">
-            <span>Nenhuma senha chamada ainda.</span>
-          </div>
+          <div className="painel-vazio">Nenhuma senha chamada ainda.</div>
         )}
       </div>
 
       <div className="painel-historico">
         <h3>Últimas chamadas</h3>
-        {historico.length > 0 ? (
+        {anteriores.length > 0 ? (
           <ul className="painel-lista">
-            {historico.map((item, i) => (
-              <li key={i} className={`painel-item painel-item-${item.tipo}`}>
-                <span className="painel-item-senha">{item.senha}</span>
+            {anteriores.map((item) => (
+              <li key={item.id} className={`painel-item painel-item-${item.tipo.toLowerCase()}`}>
+                <span className="painel-item-senha">
+                  <BadgeTipo tipo={item.tipo} /> {item.numero}
+                </span>
                 <span className="painel-item-meta">
-                  {labelTipo[item.tipo]} &mdash; Guichê {item.guiche}
+                  Guichê {item.guiche} &mdash; {formatarHora(item.chamadas[item.chamadas.length - 1])}
                 </span>
               </li>
             ))}
@@ -79,4 +74,3 @@ function PainelChamadas({ chamadas, filaTamanho, onChamarProxima, onVoltar }) {
 }
 
 export default PainelChamadas
-
