@@ -11,11 +11,16 @@ export function createHealthController({ checkDb = testConnection } = {}) {
       }
 
       const statusCode = dbConnected ? 200 : 503
-      res.status(statusCode).json({
+      const info = {
         status: dbConnected ? 'ok' : 'degraded',
         servico: 'nassauTickets-api',
         bancoDados: dbConnected ? 'conectado' : 'indisponivel',
         timestamp: new Date().toISOString(),
+      }
+      res.status(statusCode).json({
+        sucesso: dbConnected,
+        dados: info,
+        ...info,
       })
     },
   }

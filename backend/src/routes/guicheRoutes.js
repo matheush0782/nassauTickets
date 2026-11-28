@@ -24,6 +24,11 @@ export function createGuicheRoutes({
     auth.authorizeRoles(PERFIS.ATENDENTE, PERFIS.GESTOR),
     controller.liberar,
   )
+  router.get(
+    '/:id/atendimento-atual',
+    auth.authorizeRoles(PERFIS.ATENDENTE, PERFIS.GESTOR),
+    controller.atendimentoAtual,
+  )
 
   return router
 }

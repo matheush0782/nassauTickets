@@ -40,7 +40,10 @@ INSERT INTO guiches (numero, descricao, ativo)
 VALUES
   (1, 'Guiche 01', 1),
   (2, 'Guiche 02', 1),
-  (3, 'Guiche 03', 1)
+  (3, 'Guiche 03', 1),
+  (4, 'Guiche 04', 1),
+  (5, 'Guiche 05', 1)
 ON DUPLICATE KEY UPDATE
   descricao = VALUES(descricao),
   ativo = VALUES(ativo);
+

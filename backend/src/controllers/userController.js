@@ -14,7 +14,7 @@ export function createUserController({ service = userService } = {}) {
           perfil: req.query.perfil || null,
           ativo,
         })
-        res.status(200).json({ usuarios })
+        res.status(200).json({ sucesso: true, dados: { usuarios }, usuarios })
       } catch (error) {
         next(error)
       }
@@ -23,7 +23,7 @@ export function createUserController({ service = userService } = {}) {
     async getById(req, res, next) {
       try {
         const usuario = await service.getUserById(Number(req.params.id))
-        res.status(200).json({ usuario })
+        res.status(200).json({ sucesso: true, dados: { usuario }, usuario })
       } catch (error) {
         next(error)
       }
@@ -32,7 +32,7 @@ export function createUserController({ service = userService } = {}) {
     async create(req, res, next) {
       try {
         const usuario = await service.createUser(req.body || {}, getActor(req))
-        res.status(201).json({ usuario })
+        res.status(201).json({ sucesso: true, dados: { usuario }, usuario })
       } catch (error) {
         next(error)
       }
@@ -45,7 +45,7 @@ export function createUserController({ service = userService } = {}) {
           req.body || {},
           getActor(req),
         )
-        res.status(200).json({ usuario })
+        res.status(200).json({ sucesso: true, dados: { usuario }, usuario })
       } catch (error) {
         next(error)
       }
@@ -58,7 +58,7 @@ export function createUserController({ service = userService } = {}) {
           req.body?.ativo,
           getActor(req),
         )
-        res.status(200).json({ usuario })
+        res.status(200).json({ sucesso: true, dados: { usuario }, usuario })
       } catch (error) {
         next(error)
       }

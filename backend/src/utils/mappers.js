@@ -29,28 +29,43 @@ export function mapGuiche(row) {
 
 export function mapTicket(row) {
   if (!row) return null
+  const primeiraChamada = row.primeira_chamada_em ?? row.primeiraChamadaEm ?? null
+  const segundaChamada = row.segunda_chamada_em ?? row.segundaChamadaEm ?? null
+  const chamadas = Array.isArray(row.chamadas)
+    ? row.chamadas
+    : [primeiraChamada, segundaChamada].filter(Boolean)
+
+  const guicheNum = row.guiche_numero ?? row.guicheNumero ?? row.guiche ?? null
+  const atendenteNome = row.atendente_nome ?? row.atendenteNome ?? row.atendente ?? null
+
   return {
     id: row.id,
-    codigo: row.codigo,
+    codigo: row.codigo ?? row.numero,
+    numero: row.codigo ?? row.numero,
     tipo: row.tipo,
     dataReferencia:
       row.data_referencia instanceof Date
         ? row.data_referencia.toISOString().slice(0, 10)
-        : row.data_referencia ?? null,
+        : row.data_referencia ?? row.dataReferencia ?? null,
     sequencial: row.sequencial,
     status: row.status,
-    guicheId: row.guiche_id ?? null,
-    guicheNumero: row.guiche_numero ?? null,
-    atendenteId: row.atendente_id ?? null,
-    atendenteNome: row.atendente_nome ?? null,
-    atendenteLogin: row.atendente_login ?? null,
-    emitidaEm: row.emitida_em ?? null,
-    primeiraChamadaEm: row.primeira_chamada_em ?? null,
-    segundaChamadaEm: row.segunda_chamada_em ?? null,
-    inicioAtendimentoEm: row.inicio_atendimento_em ?? null,
-    fimAtendimentoEm: row.fim_atendimento_em ?? null,
-    tempoAtendimentoSegundos: row.tempo_atendimento_segundos ?? null,
-    atualizadoEm: row.atualizado_em ?? null,
+    guicheId: row.guiche_id ?? row.guicheId ?? null,
+    guicheNumero: guicheNum,
+    guiche: guicheNum,
+    atendenteId: row.atendente_id ?? row.atendenteId ?? null,
+    atendenteNome: atendenteNome,
+    atendenteLogin: row.atendente_login ?? row.atendenteLogin ?? null,
+    atendente: atendenteNome,
+    emitidaEm: row.emitida_em ?? row.emitidaEm ?? null,
+    primeiraChamadaEm: primeiraChamada,
+    segundaChamadaEm: segundaChamada,
+    chamadas,
+    inicioAtendimentoEm: row.inicio_atendimento_em ?? row.inicioAtendimentoEm ?? row.inicioEm ?? null,
+    inicioEm: row.inicio_atendimento_em ?? row.inicioAtendimentoEm ?? row.inicioEm ?? null,
+    fimAtendimentoEm: row.fim_atendimento_em ?? row.fimAtendimentoEm ?? row.fimEm ?? null,
+    fimEm: row.fim_atendimento_em ?? row.fimAtendimentoEm ?? row.fimEm ?? null,
+    tempoAtendimentoSegundos: row.tempo_atendimento_segundos ?? row.tempoAtendimentoSegundos ?? null,
+    atualizadoEm: row.atualizado_em ?? row.atualizadoEm ?? null,
   }
 }
 

@@ -30,6 +30,8 @@ const initialGuiches = [
   { numero: 1, descricao: 'Guiche 01' },
   { numero: 2, descricao: 'Guiche 02' },
   { numero: 3, descricao: 'Guiche 03' },
+  { numero: 4, descricao: 'Guiche 04' },
+  { numero: 5, descricao: 'Guiche 05' },
 ]
 
 async function runSeed() {

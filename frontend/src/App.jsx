@@ -3,48 +3,38 @@ import './App.css'
 import Home from './pages/Home.jsx'
 import EmissaoSenha from './pages/EmissaoSenha.jsx'
 import PainelChamadas from './pages/PainelChamadas.jsx'
+import Login from './pages/Login.jsx'
+import TerminalAtendimento from './pages/TerminalAtendimento.jsx'
+import Relatorios from './pages/Relatorios.jsx'
+import { logout, sessaoAtual, usandoSimulador } from './services/api.js'
 
-function dataAtual() {
-  const agora = new Date()
-  const ano = String(agora.getFullYear()).slice(-2)
-  const mes = String(agora.getMonth() + 1).padStart(2, '0')
-  const dia = String(agora.getDate()).padStart(2, '0')
-  return `${ano}${mes}${dia}`
-}
+// Paginas e quem pode acessa-las
+const PAGINAS = [
+  { id: 'home', titulo: 'Início', acesso: 'publico' },
+  { id: 'emissao', titulo: 'Totem', acesso: 'publico' },
+  { id: 'painel', titulo: 'Painel', acesso: 'publico' },
+  { id: 'terminal', titulo: 'Atendimento', acesso: 'ATENDENTE' },
+  { id: 'relatorios', titulo: 'Relatórios', acesso: 'GESTOR' },
+]
 
-// Guichês disponíveis: rotaciona entre 1, 2 e 3
-function proximoGuiche(totalChamadas) {
-  return (totalChamadas % 3) + 1
+function podeAcessar(pagina, sessao) {
+  if (pagina.acesso === 'publico') return true
+  if (!sessao) return false
+  if (pagina.acesso === 'GESTOR') return sessao.perfil === 'GESTOR'
+  return true // ATENDENTE e GESTOR acessam o terminal
 }
 
 function App() {
   const [pagina, setPagina] = useState('home')
-  const [sequencias, setSequencias] = useState({ SP: 0, SG: 0, SE: 0 })
-  // fila: senhas emitidas aguardando chamada (FIFO — índice 0 é a mais antiga)
-  const [fila, setFila] = useState([])
-  // chamadas: senhas já chamadas pelo atendente (índice 0 é a mais recente)
-  const [chamadas, setChamadas] = useState([])
+  const [sessao, setSessao] = useState(() => sessaoAtual())
 
-  function handleEmitirSenha(codigo) {
-    const novaSeq = sequencias[codigo] + 1
-    const seq = String(novaSeq).padStart(3, '0')
-    const senha = `${dataAtual()}-${codigo}${seq}`
+  const paginaAtual = PAGINAS.find((p) => p.id === pagina)
+  const precisaLogin = !podeAcessar(paginaAtual, sessao)
 
-    setSequencias((prev) => ({ ...prev, [codigo]: novaSeq }))
-    // Entra no final da fila (a mais nova); guichê ainda não atribuído
-    setFila((prev) => [...prev, { senha, tipo: codigo.toLowerCase() }])
-
-    return senha // devolvido para EmissaoSenha exibir localmente
-  }
-
-  function handleChamarProxima() {
-    if (fila.length === 0) return
-    const proxima = fila[0]
-    const guiche = proximoGuiche(chamadas.length)
-
-    setFila((prev) => prev.slice(1))
-    // Mantém no máximo 6 itens: 1 em atendimento + 5 no histórico
-    setChamadas((prev) => [{ ...proxima, guiche }, ...prev].slice(0, 6))
+  function handleSair() {
+    logout()
+    setSessao(null)
+    setPagina('home')
   }
 
   return (
@@ -54,34 +44,51 @@ function App() {
           nassau<span>Tickets</span>
         </h1>
         <p>Laboratório de Análises Clínicas</p>
-        <nav className="app-nav">
-          <button
-            type="button"
-            className={`app-nav-link${pagina === 'painel' ? ' ativo' : ''}`}
-            onClick={() => setPagina('painel')}
-          >
-            Painel
-          </button>
+
+        <nav className="app-nav" aria-label="Navegação principal">
+          {PAGINAS.filter((p) => p.acesso !== 'GESTOR' || sessao?.perfil === 'GESTOR').map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              className={`app-nav-link${pagina === p.id ? ' ativo' : ''}`}
+              aria-current={pagina === p.id ? 'page' : undefined}
+              onClick={() => setPagina(p.id)}
+            >
+              {p.titulo}
+            </button>
+          ))}
+          {sessao && (
+            <button type="button" className="app-nav-link app-nav-sair" onClick={handleSair}>
+              Sair ({sessao.nome})
+            </button>
+          )}
         </nav>
       </header>
+
+      {usandoSimulador && (
+        <div className="app-aviso-simulador">
+          Modo simulação: os dados ficam salvos neste navegador até o backend ser conectado (VITE_API_URL).
+        </div>
+      )}
+
       <main className="app-main">
         {pagina === 'home' && (
           <Home
             onEmitirSenha={() => setPagina('emissao')}
             onAbrirPainel={() => setPagina('painel')}
+            onAbrirTerminal={() => setPagina('terminal')}
           />
         )}
-        {pagina === 'emissao' && (
-          <EmissaoSenha onEmitirSenha={handleEmitirSenha} />
+        {pagina === 'emissao' && <EmissaoSenha />}
+        {pagina === 'painel' && <PainelChamadas />}
+
+        {precisaLogin && sessao && (
+          <p className="app-sem-permissao">Seu perfil não tem permissão para acessar esta página.</p>
         )}
-        {pagina === 'painel' && (
-          <PainelChamadas
-            chamadas={chamadas}
-            filaTamanho={fila.length}
-            onChamarProxima={handleChamarProxima}
-            onVoltar={() => setPagina('home')}
-          />
-        )}
+        {precisaLogin && !sessao && <Login onEntrar={setSessao} />}
+
+        {!precisaLogin && pagina === 'terminal' && <TerminalAtendimento sessao={sessao} />}
+        {!precisaLogin && pagina === 'relatorios' && <Relatorios />}
       </main>
     </div>
   )

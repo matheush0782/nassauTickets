@@ -265,3 +265,22 @@
     gap: 4px;
   }
 }
+
+/* Ajustes do Desenvolvedor 3 */
+.painel-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.painel-topo h2 {
+  margin: 0;
+  color: var(--azul);
+  font-size: 26px;
+}
+.painel-item-senha {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -10,7 +10,7 @@ export function createAuditController({ audit = auditRepository } = {}) {
           acao: req.query?.acao || null,
           usuarioId: req.query?.usuarioId || null,
         })
-        res.status(200).json({ eventos })
+        res.status(200).json({ sucesso: true, dados: { eventos }, eventos })
       } catch (error) {
         next(error)
       }

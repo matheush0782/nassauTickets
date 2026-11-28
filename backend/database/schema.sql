@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS senhas (
   UNIQUE KEY uq_senhas_data_tipo_seq (data_referencia, tipo, sequencial),
   INDEX idx_senhas_status_data (status, data_referencia),
   INDEX idx_senhas_tipo_data (tipo, data_referencia),
+  INDEX idx_senhas_busca_chamada (status, data_referencia, tipo, emitida_em),
   INDEX idx_senhas_primeira_chamada (primeira_chamada_em),
   CONSTRAINT fk_senhas_guiche
     FOREIGN KEY (guiche_id) REFERENCES guiches(id)
@@ -110,3 +111,26 @@ CREATE TABLE IF NOT EXISTS auditoria_eventos (
     ON DELETE SET NULL
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Controle persistente do expediente diario (RN19, RN21, RN28, RN29)
+CREATE TABLE IF NOT EXISTS expediente_diario (
+  data_referencia DATE NOT NULL,
+  encerrado_manualmente TINYINT(1) NOT NULL DEFAULT 0,
+  encerrado_em DATETIME NULL,
+  encerrado_por INT UNSIGNED NULL,
+  reaberto_em DATETIME NULL,
+  reaberto_por INT UNSIGNED NULL,
+  ultimo_tipo_chamado ENUM('SP', 'SG', 'SE') NULL,
+  criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (data_referencia),
+  CONSTRAINT fk_expediente_encerrado_por
+    FOREIGN KEY (encerrado_por) REFERENCES usuarios(id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_expediente_reaberto_por
+    FOREIGN KEY (reaberto_por) REFERENCES usuarios(id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

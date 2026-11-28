@@ -5,11 +5,19 @@ export function createAuthController({ service = authService } = {}) {
     async login(req, res, next) {
       try {
         const result = await service.login({
-          login: req.body?.login,
+          login: req.body?.login || req.body?.usuario,
+          usuario: req.body?.usuario,
           senha: req.body?.senha,
           ipOrigem: req.ip,
         })
-        res.status(200).json(result)
+        res.status(200).json({
+          sucesso: true,
+          dados: result,
+          token: result.token,
+          usuario: result.usuario,
+          nome: result.nome,
+          perfil: result.perfil,
+        })
       } catch (error) {
         next(error)
       }
@@ -18,7 +26,11 @@ export function createAuthController({ service = authService } = {}) {
     async me(req, res, next) {
       try {
         const usuario = await service.getProfile(req.user.id)
-        res.status(200).json({ usuario })
+        res.status(200).json({
+          sucesso: true,
+          dados: { usuario },
+          usuario,
+        })
       } catch (error) {
         next(error)
       }

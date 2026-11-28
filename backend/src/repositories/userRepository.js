@@ -5,6 +5,17 @@ const USER_PUBLIC_FIELDS =
   'id, nome, login, email, perfil, ativo, criado_em, atualizado_em'
 
 export const userRepository = {
+  async findAuthByLogin(login) {
+    const rows = await query(
+      `SELECT id, nome, login, email, senha_hash, perfil, ativo, criado_em, atualizado_em
+       FROM usuarios
+       WHERE login = ?
+       LIMIT 1`,
+      [login],
+    )
+    return rows[0] || null
+  },
+
   async findByLogin(login) {
     const rows = await query(
       `SELECT id, nome, login, email, senha_hash, perfil, ativo, criado_em, atualizado_em

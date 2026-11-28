@@ -24,6 +24,11 @@ export const guicheRepository = {
     return rows[0] || null
   },
 
+  async findByAtendenteId(atendenteId) {
+    const rows = await query(`${GUICHE_SELECT} WHERE g.atendente_atual_id = ? LIMIT 1`, [atendenteId])
+    return rows[0] || null
+  },
+
   async create({ numero, descricao = null, ativo = true }) {
     const result = await query(
       `INSERT INTO guiches (numero, descricao, ativo)

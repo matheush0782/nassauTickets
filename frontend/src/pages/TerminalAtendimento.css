@@ -1,0 +1,128 @@
+.terminal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--azul);
+  padding: 36px 44px;
+}
+.terminal h2 {
+  margin: 0 0 6px;
+  color: var(--azul);
+}
+.terminal-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.terminal-topo p {
+  margin: 0;
+}
+.terminal-guiches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+.terminal-guiche-botao {
+  padding: 26px 12px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--azul);
+  background: var(--azul-claro);
+  color: var(--azul);
+  font-size: 17px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.terminal-guiche-botao:hover,
+.terminal-guiche-botao:focus-visible {
+  border-left-color: var(--amarelo);
+  background: #e2ebf5;
+}
+.terminal-indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.terminal-atendimento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  border: 1px dashed var(--border);
+  background: #fafbfc;
+}
+.terminal-senha {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.terminal-senha > strong {
+  font-size: 34px;
+  color: var(--azul);
+  letter-spacing: 1px;
+}
+.terminal-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+.terminal-status {
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--azul-claro);
+  color: var(--azul);
+}
+.terminal-status-chamada_novamente {
+  background: #fff4d6;
+  color: #7a5400;
+}
+.terminal-status-em_atendimento {
+  background: #e8f6ee;
+  color: #145c32;
+}
+.terminal-tempos {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+.terminal-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+}
+.terminal-livre {
+  width: 100%;
+  text-align: center;
+}
+.terminal-gestor {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.terminal-gestor h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: var(--azul);
+}
+
+@media (max-width: 700px) {
+  .terminal {
+    padding: 24px 18px;
+  }
+  .terminal-indicadores {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .terminal-atendimento {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
