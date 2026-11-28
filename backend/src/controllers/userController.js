@@ -1,5 +1,4 @@
 import { userService } from '../services/userService.js'
-import { parsePositiveInt, sendSuccess } from '../utils/http.js'
 
 function getActor(req) {
   return { id: req.user?.id ?? null, ipOrigem: req.ip }
@@ -15,48 +14,53 @@ export function createUserController({ service = userService } = {}) {
           perfil: req.query.perfil || null,
           ativo,
         })
-        return sendSuccess(res, { usuarios })
+        res.status(200).json({ usuarios })
       } catch (error) {
-        return next(error)
+        next(error)
       }
     },
 
     async getById(req, res, next) {
       try {
-        const id = parsePositiveInt(req.params.id)
-        const usuario = await service.getUserById(id)
-        return sendSuccess(res, { usuario })
+        const usuario = await service.getUserById(Number(req.params.id))
+        res.status(200).json({ usuario })
       } catch (error) {
-        return next(error)
+        next(error)
       }
     },
 
     async create(req, res, next) {
       try {
         const usuario = await service.createUser(req.body || {}, getActor(req))
-        return sendSuccess(res, { usuario }, { statusCode: 201 })
+        res.status(201).json({ usuario })
       } catch (error) {
-        return next(error)
+        next(error)
       }
     },
 
     async update(req, res, next) {
       try {
-        const id = parsePositiveInt(req.params.id)
-        const usuario = await service.updateUser(id, req.body || {}, getActor(req))
-        return sendSuccess(res, { usuario })
+        const usuario = await service.updateUser(
+          Number(req.params.id),
+          req.body || {},
+          getActor(req),
+        )
+        res.status(200).json({ usuario })
       } catch (error) {
-        return next(error)
+        next(error)
       }
     },
 
     async setStatus(req, res, next) {
       try {
-        const id = parsePositiveInt(req.params.id)
-        const usuario = await service.setUserStatus(id, req.body?.ativo, getActor(req))
-        return sendSuccess(res, { usuario })
+        const usuario = await service.setUserStatus(
+          Number(req.params.id),
+          req.body?.ativo,
+          getActor(req),
+        )
+        res.status(200).json({ usuario })
       } catch (error) {
-        return next(error)
+        next(error)
       }
     },
   }

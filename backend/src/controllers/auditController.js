@@ -1,5 +1,4 @@
 import { auditRepository } from '../repositories/auditRepository.js'
-import { sendSuccess } from '../utils/http.js'
 
 export function createAuditController({ audit = auditRepository } = {}) {
   return {
@@ -11,9 +10,9 @@ export function createAuditController({ audit = auditRepository } = {}) {
           acao: req.query?.acao || null,
           usuarioId: req.query?.usuarioId || null,
         })
-        return sendSuccess(res, { eventos })
+        res.status(200).json({ eventos })
       } catch (error) {
-        return next(error)
+        next(error)
       }
     },
   }

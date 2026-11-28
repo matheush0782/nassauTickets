@@ -1,0 +1,101 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: var(--azul);
+  color: var(--branco);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 4px solid var(--amarelo);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--branco);
+  letter-spacing: 0.2px;
+}
+
+.app-header h1 span {
+  color: var(--amarelo);
+}
+
+.app-header p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  padding-left: 16px;
+}
+
+.app-main {
+  flex: 1;
+  padding: 48px 32px;
+}
+
+.pagina {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.botao-primario {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 4px;
+  background: var(--azul);
+  color: var(--branco);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao-primario:hover {
+  background: #003b77;
+}
+
+.app-nav {
+  margin-left: auto;
+}
+
+.app-nav-link {
+  padding: 6px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--branco);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+}
+
+.app-nav-link:hover,
+.app-nav-link.ativo {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--amarelo);
+  color: var(--amarelo);
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 20px;
+  }
+
+  .app-header p {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .app-main {
+    padding: 28px 16px;
+  }
+}
