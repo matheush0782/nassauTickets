@@ -1,4 +1,5 @@
 import { testConnection } from '../config/database.js'
+import { sendSuccess } from '../utils/http.js'
 
 export function createHealthController({ checkDb = testConnection } = {}) {
   return {
@@ -10,13 +11,23 @@ export function createHealthController({ checkDb = testConnection } = {}) {
         dbConnected = false
       }
 
-      const statusCode = dbConnected ? 200 : 503
-      res.status(statusCode).json({
+      const dados = {
         status: dbConnected ? 'ok' : 'degraded',
         servico: 'nassauTickets-api',
         bancoDados: dbConnected ? 'conectado' : 'indisponivel',
         timestamp: new Date().toISOString(),
-      })
+      }
+
+      if (!dbConnected) {
+        return res.status(503).json({
+          sucesso: false,
+          erro: 'Banco de dados indisponivel.',
+          codigo: 'DATABASE_UNAVAILABLE',
+          dados,
+        })
+      }
+
+      return sendSuccess(res, dados)
     },
   }
 }

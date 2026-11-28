@@ -1,4 +1,9 @@
 import { ticketService } from '../services/ticketService.js'
+import { parsePositiveInt, sendSuccess } from '../utils/http.js'
+
+function getActor(req) {
+  return { id: req.user?.id ?? null, perfil: req.user?.perfil ?? null, ipOrigem: req.ip }
+}
 
 export function createTicketController({ service = ticketService } = {}) {
   return {
@@ -8,18 +13,30 @@ export function createTicketController({ service = ticketService } = {}) {
           tipo: req.body?.tipo,
           ipOrigem: req.ip,
         })
-        res.status(201).json({ senha })
+        return sendSuccess(res, { senha }, { statusCode: 201 })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
 
     async list(req, res, next) {
       try {
         const senhas = await service.listarSenhas(req.query || {})
-        res.status(200).json({ senhas })
+        return sendSuccess(res, { senhas })
       } catch (error) {
-        next(error)
+        return next(error)
+      }
+    },
+
+    async fila(req, res, next) {
+      try {
+        const fila = await service.consultarFila({
+          data: req.query?.data || null,
+          tipo: req.query?.tipo || null,
+        })
+        return sendSuccess(res, fila)
+      } catch (error) {
+        return next(error)
       }
     },
 
@@ -27,31 +44,101 @@ export function createTicketController({ service = ticketService } = {}) {
       try {
         const limit = req.query?.limit ? Number(req.query.limit) : 5
         const chamadas = await service.obterPainelChamadas({ limit })
-        res.status(200).json({ chamadas })
+        return sendSuccess(res, { chamadas })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
 
     async getById(req, res, next) {
       try {
-        const senha = await service.buscarSenhaPorId(Number(req.params.id))
-        res.status(200).json({ senha })
+        const id = parsePositiveInt(req.params.id)
+        const senha = await service.buscarSenhaPorId(id)
+        return sendSuccess(res, { senha })
       } catch (error) {
-        next(error)
+        return next(error)
+      }
+    },
+
+    async reservarProxima(req, res, next) {
+      try {
+        const senha = await service.reservarProximaSenha(req.body || {}, getActor(req))
+        return sendSuccess(res, { senha })
+      } catch (error) {
+        return next(error)
+      }
+    },
+
+    async reservarPorId(req, res, next) {
+      try {
+        const id = parsePositiveInt(req.params.id)
+        const senha = await service.reservarSenhaPorId(id, req.body || {}, getActor(req))
+        return sendSuccess(res, { senha })
+      } catch (error) {
+        return next(error)
+      }
+    },
+
+    async chamarNovamente(req, res, next) {
+      try {
+        const id = parsePositiveInt(req.params.id)
+        const senha = await service.registrarSegundaChamada(id, getActor(req))
+        return sendSuccess(res, { senha })
+      } catch (error) {
+        return next(error)
+      }
+    },
+
+    async iniciarAtendimento(req, res, next) {
+      try {
+        const id = parsePositiveInt(req.params.id)
+        const senha = await service.iniciarAtendimento(id, getActor(req))
+        return sendSuccess(res, { senha })
+      } catch (error) {
+        return next(error)
+      }
+    },
+
+    async finalizarAtendimento(req, res, next) {
+      try {
+        const id = parsePositiveInt(req.params.id)
+        const senha = await service.finalizarAtendimento(id, getActor(req))
+        return sendSuccess(res, { senha })
+      } catch (error) {
+        return next(error)
+      }
+    },
+
+    async naoCompareceu(req, res, next) {
+      try {
+        const id = parsePositiveInt(req.params.id)
+        const senha = await service.registrarNaoCompareceu(id, getActor(req))
+        return sendSuccess(res, { senha })
+      } catch (error) {
+        return next(error)
+      }
+    },
+
+    async descartarPendentes(req, res, next) {
+      try {
+        const resultado = await service.descartarSenhasPendentes(req.body || {}, getActor(req))
+        return sendSuccess(res, resultado)
+      } catch (error) {
+        return next(error)
       }
     },
 
     async updateStatus(req, res, next) {
       try {
+        const id = parsePositiveInt(req.params.id)
         const senha = await service.atualizarStatusPersistencia(
-          Number(req.params.id),
+          id,
           req.body || {},
-          { id: req.user?.id ?? null, ipOrigem: req.ip },
+          getActor(req),
         )
-        res.status(200).json({ senha })
+        return sendSuccess(res, { senha })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
   }

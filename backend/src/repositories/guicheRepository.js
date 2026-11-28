@@ -1,4 +1,5 @@
 import { query, withTransaction } from '../config/database.js'
+import { mapGuiche } from '../utils/mappers.js'
 
 const GUICHE_SELECT = `
   SELECT g.id, g.numero, g.descricao, g.ativo, g.atendente_atual_id,
@@ -11,17 +12,26 @@ const GUICHE_SELECT = `
 export const guicheRepository = {
   async listAll({ apenasAtivos = false } = {}) {
     const where = apenasAtivos ? 'WHERE g.ativo = 1' : ''
-    return query(`${GUICHE_SELECT} ${where} ORDER BY g.numero ASC`)
+    const rows = await query(`${GUICHE_SELECT} ${where} ORDER BY g.numero ASC`)
+    return rows.map(mapGuiche)
   },
 
   async findById(id) {
     const rows = await query(`${GUICHE_SELECT} WHERE g.id = ? LIMIT 1`, [id])
-    return rows[0] || null
+    return mapGuiche(rows[0])
   },
 
   async findByNumero(numero) {
     const rows = await query(`${GUICHE_SELECT} WHERE g.numero = ? LIMIT 1`, [numero])
-    return rows[0] || null
+    return mapGuiche(rows[0])
+  },
+
+  async findByAtendenteId(usuarioId) {
+    const rows = await query(
+      `${GUICHE_SELECT} WHERE g.atendente_atual_id = ? LIMIT 1`,
+      [usuarioId],
+    )
+    return mapGuiche(rows[0])
   },
 
   async create({ numero, descricao = null, ativo = true }) {
@@ -60,7 +70,7 @@ export const guicheRepository = {
   },
 
   async assignAtendente(guicheId, usuarioId) {
-    return withTransaction(async (connection) => {
+    const res = await withTransaction(async (connection) => {
       const [rows] = await connection.execute(
         'SELECT id, ativo, atendente_atual_id FROM guiches WHERE id = ? FOR UPDATE',
         [guicheId],
@@ -76,7 +86,6 @@ export const guicheRepository = {
         return { error: 'OCCUPIED' }
       }
 
-      // Libera eventual guiche anterior ocupado pelo mesmo atendente
       await connection.execute(
         'UPDATE guiches SET atendente_atual_id = NULL WHERE atendente_atual_id = ? AND id <> ?',
         [usuarioId, guicheId],
@@ -86,14 +95,14 @@ export const guicheRepository = {
         [usuarioId, guicheId],
       )
       return { error: null }
-    }).then(async (res) => {
-      if (res.error) return res
-      return { error: null, guiche: await this.findById(guicheId) }
     })
+
+    if (res.error) return res
+    return { error: null, guiche: await this.findById(guicheId) }
   },
 
   async releaseAtendente(guicheId, usuarioId, { force = false } = {}) {
-    return withTransaction(async (connection) => {
+    const res = await withTransaction(async (connection) => {
       const [rows] = await connection.execute(
         'SELECT id, atendente_atual_id FROM guiches WHERE id = ? FOR UPDATE',
         [guicheId],
@@ -115,9 +124,9 @@ export const guicheRepository = {
         [guicheId],
       )
       return { error: null }
-    }).then(async (res) => {
-      if (res.error) return res
-      return { error: null, guiche: await this.findById(guicheId) }
     })
+
+    if (res.error) return res
+    return { error: null, guiche: await this.findById(guicheId) }
   },
 }

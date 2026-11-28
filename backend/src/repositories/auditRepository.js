@@ -1,20 +1,29 @@
 import { query } from '../config/database.js'
+import { mapAuditEvent } from '../utils/mappers.js'
 
 export const auditRepository = {
-  async registrarEvento({
-    usuarioId = null,
-    senhaId = null,
-    guicheId = null,
-    acao,
-    detalhes = null,
-    ipOrigem = null,
-  }) {
+  async registrarEvento(
+    {
+      usuarioId = null,
+      senhaId = null,
+      guicheId = null,
+      acao,
+      detalhes = null,
+      ipOrigem = null,
+    },
+    connection = null,
+  ) {
     const detalhesJson = detalhes ? JSON.stringify(detalhes) : null
-    const result = await query(
-      `INSERT INTO auditoria_eventos (usuario_id, senha_id, guiche_id, acao, detalhes, ip_origem)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [usuarioId, senhaId, guicheId, acao, detalhesJson, ipOrigem],
-    )
+    const sql = `INSERT INTO auditoria_eventos (usuario_id, senha_id, guiche_id, acao, detalhes, ip_origem)
+                 VALUES (?, ?, ?, ?, ?, ?)`
+    const params = [usuarioId, senhaId, guicheId, acao, detalhesJson, ipOrigem]
+
+    if (connection) {
+      const [result] = await connection.execute(sql, params)
+      return result.insertId
+    }
+
+    const result = await query(sql, params)
     return result.insertId
   },
 
@@ -35,7 +44,7 @@ export const auditRepository = {
     const safeLimit = Math.min(Math.max(Number(limite) || 50, 1), 200)
     const safeOffset = Math.max(Number(offset) || 0, 0)
 
-    return query(
+    const rows = await query(
       `SELECT a.id, a.usuario_id, u.login AS usuario_login, u.nome AS usuario_nome,
               a.senha_id, s.codigo AS senha_codigo, a.guiche_id, g.numero AS guiche_numero,
               a.acao, a.detalhes, a.ip_origem, a.criado_em
@@ -48,5 +57,6 @@ export const auditRepository = {
        LIMIT ${safeLimit} OFFSET ${safeOffset}`,
       params,
     )
+    return rows.map(mapAuditEvent)
   },
 }

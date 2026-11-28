@@ -10,7 +10,7 @@
     "dev": "node --watch src/server.js",
     "db:init": "node src/database/init.js",
     "db:seed": "node src/database/seed.js",
-    "test": "node --test"
+    "test": "node --test \"tests/*.test.js\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

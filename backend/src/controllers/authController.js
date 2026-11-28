@@ -1,26 +1,27 @@
 import { authService } from '../services/authService.js'
+import { sendSuccess } from '../utils/http.js'
 
 export function createAuthController({ service = authService } = {}) {
   return {
     async login(req, res, next) {
       try {
-        const result = await service.login({
+        const dados = await service.login({
           login: req.body?.login,
           senha: req.body?.senha,
           ipOrigem: req.ip,
         })
-        res.status(200).json(result)
+        return sendSuccess(res, dados)
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
 
     async me(req, res, next) {
       try {
-        const usuario = await service.getProfile(req.user.id)
-        res.status(200).json({ usuario })
+        const dados = await service.getProfile(req.user.id)
+        return sendSuccess(res, dados)
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
   }

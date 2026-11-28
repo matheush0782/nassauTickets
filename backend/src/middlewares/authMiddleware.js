@@ -28,6 +28,10 @@ export function createAuthMiddleware({
         throw new UnauthorizedError('Usuario inativo ou inexistente.')
       }
 
+      if (payload.perfil && user.perfil !== payload.perfil) {
+        throw new UnauthorizedError('Permissoes do usuario foram alteradas. Faca login novamente.')
+      }
+
       req.user = {
         id: user.id,
         nome: user.nome,

@@ -1,4 +1,5 @@
 import { guicheService } from '../services/guicheService.js'
+import { parsePositiveInt, sendSuccess } from '../utils/http.js'
 
 function getActor(req) {
   return { id: req.user.id, perfil: req.user.perfil, ipOrigem: req.ip }
@@ -11,49 +12,48 @@ export function createGuicheController({ service = guicheService } = {}) {
         const apenasAtivos =
           req.query.ativos === 'true' || req.query.ativos === '1'
         const guiches = await service.listGuiches({ apenasAtivos })
-        res.status(200).json({ guiches })
+        return sendSuccess(res, { guiches })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
 
     async create(req, res, next) {
       try {
         const guiche = await service.createGuiche(req.body || {}, getActor(req))
-        res.status(201).json({ guiche })
+        return sendSuccess(res, { guiche }, { statusCode: 201 })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
 
     async update(req, res, next) {
       try {
-        const guiche = await service.updateGuiche(
-          Number(req.params.id),
-          req.body || {},
-          getActor(req),
-        )
-        res.status(200).json({ guiche })
+        const id = parsePositiveInt(req.params.id)
+        const guiche = await service.updateGuiche(id, req.body || {}, getActor(req))
+        return sendSuccess(res, { guiche })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
 
     async ocupar(req, res, next) {
       try {
-        const guiche = await service.ocuparGuiche(Number(req.params.id), getActor(req))
-        res.status(200).json({ guiche })
+        const id = parsePositiveInt(req.params.id)
+        const guiche = await service.ocuparGuiche(id, getActor(req))
+        return sendSuccess(res, { guiche })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
 
     async liberar(req, res, next) {
       try {
-        const guiche = await service.liberarGuiche(Number(req.params.id), getActor(req))
-        res.status(200).json({ guiche })
+        const id = parsePositiveInt(req.params.id)
+        const guiche = await service.liberarGuiche(id, getActor(req))
+        return sendSuccess(res, { guiche })
       } catch (error) {
-        next(error)
+        return next(error)
       }
     },
   }

@@ -14,14 +14,28 @@ export function createTicketRoutes({
   router.get('/painel', controller.painel)
 
   // Rotas protegidas para atendentes (AA) e gestor
-  router.get('/', auth.authenticate, auth.authorizeRoles(PERFIS.ATENDENTE, PERFIS.GESTOR), controller.list)
-  router.get('/:id', auth.authenticate, auth.authorizeRoles(PERFIS.ATENDENTE, PERFIS.GESTOR), controller.getById)
-  router.patch(
-    '/:id/status',
+  const isAtendenteOuGestor = [
     auth.authenticate,
     auth.authorizeRoles(PERFIS.ATENDENTE, PERFIS.GESTOR),
-    controller.updateStatus,
+  ]
+
+  router.get('/fila', ...isAtendenteOuGestor, controller.fila)
+  router.post('/reservar-proxima', ...isAtendenteOuGestor, controller.reservarProxima)
+  router.post(
+    '/descartar-pendentes',
+    auth.authenticate,
+    auth.authorizeRoles(PERFIS.GESTOR),
+    controller.descartarPendentes,
   )
+
+  router.get('/', ...isAtendenteOuGestor, controller.list)
+  router.get('/:id', ...isAtendenteOuGestor, controller.getById)
+  router.post('/:id/reservar', ...isAtendenteOuGestor, controller.reservarPorId)
+  router.post('/:id/chamar-novamente', ...isAtendenteOuGestor, controller.chamarNovamente)
+  router.post('/:id/iniciar', ...isAtendenteOuGestor, controller.iniciarAtendimento)
+  router.post('/:id/finalizar', ...isAtendenteOuGestor, controller.finalizarAtendimento)
+  router.post('/:id/nao-compareceu', ...isAtendenteOuGestor, controller.naoCompareceu)
+  router.patch('/:id/status', ...isAtendenteOuGestor, controller.updateStatus)
 
   return router
 }
